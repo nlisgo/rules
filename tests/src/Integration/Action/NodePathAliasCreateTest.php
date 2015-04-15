@@ -10,7 +10,7 @@ namespace Drupal\Tests\rules\Integration\Action;
 use Drupal\Tests\rules\Integration\RulesEntityIntegrationTestBase;
 
 /**
- * @coversDefaultClass \Drupal\rules\Plugin\Action\NodePathAliasCreate
+ * @coversDefaultClass \Drupal\rules\Plugin\Action\EntityPathAliasCreate
  * @group rules_actions
  */
 class NodePathAliasCreateTest extends RulesEntityIntegrationTestBase {
@@ -38,7 +38,7 @@ class NodePathAliasCreateTest extends RulesEntityIntegrationTestBase {
 
     $this->aliasStorage = $this->getMock('Drupal\Core\Path\AliasStorageInterface');
     $this->container->set('path.alias_storage', $this->aliasStorage);
-    $this->action = $this->actionManager->createInstance('rules_node_path_alias_create');
+    $this->action = $this->actionManager->createInstance('rules_entity_path_alias_create:entity:node');
   }
 
   /**
@@ -65,7 +65,7 @@ class NodePathAliasCreateTest extends RulesEntityIntegrationTestBase {
     $node->expects($this->once())
       ->method('save');
 
-    $this->action->setContextValue('node', $node)
+    $this->action->setContextValue('entity', $node)
       ->setContextValue('alias', 'about');
 
     $this->action->execute();
@@ -86,7 +86,7 @@ class NodePathAliasCreateTest extends RulesEntityIntegrationTestBase {
     $node->expects($this->never())
       ->method('save');
 
-    $this->action->setContextValue('node', $node)
+    $this->action->setContextValue('entity', $node)
       ->setContextValue('alias', 'about');
 
     $this->action->execute();

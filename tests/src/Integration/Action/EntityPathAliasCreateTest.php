@@ -83,7 +83,11 @@ class EntityPathAliasCreateTest extends RulesEntityIntegrationTestBase {
 
     $this->container->set('entity.manager', $this->entityManager);
 
-    $this->aliasStorage = $this->getMock('Drupal\Core\Path\AliasStorageInterface');
+    // Prepare mocked AliasStorageInterface.
+    $this->aliasStorage = $this->getMockBuilder('Drupal\Core\Path\AliasStorageInterface')
+      ->setMethods(['save'])
+      ->getMockForAbstractClass();
+
     $this->container->set('path.alias_storage', $this->aliasStorage);
 
     // Instantiate the action we are testing.
@@ -105,6 +109,11 @@ class EntityPathAliasCreateTest extends RulesEntityIntegrationTestBase {
    * @covers ::execute
    */
   public function testActionExecutionWithUnsavedEntity() {
+    // Test that the alias is only saved once.
+    $this->aliasStorage
+      ->expects($this->once())
+      ->method('save');
+
     $entity = $this->getMockEntity();
     $entity->expects($this->once())
       ->method('isNew')
@@ -126,6 +135,11 @@ class EntityPathAliasCreateTest extends RulesEntityIntegrationTestBase {
    * @covers ::execute
    */
   public function testActionExecutionWithSavedEntity() {
+    // Test that the alias is only saved once.
+    $this->aliasStorage
+      ->expects($this->once())
+      ->method('save');
+
     $entity = $this->getMockEntity();
     $entity->expects($this->once())
       ->method('isNew')

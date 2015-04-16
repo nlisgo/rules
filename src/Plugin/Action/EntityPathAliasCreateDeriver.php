@@ -63,7 +63,7 @@ class EntityPathAliasCreateDeriver extends DeriverBase implements ContainerDeriv
 
       $this->derivatives["entity:$entity_type_id"] = [
         'label' => $this->t('Create @entity_type path alias', ['@entity_type' => $entity_type->getLowercaseLabel()]),
-        'category' => $entity_type->getLabel(),
+        'category' => $this->t('Path'),
         'entity_type_id' => $entity_type_id,
         'context' => [
           'entity' => new ContextDefinition("entity:$entity_type_id", $entity_type->getLabel(), $this->t('The @entity_type for which to create a path alias.', ['@entity_type' => $entity_type->getLowercaseLabel()])),

@@ -7,7 +7,6 @@
 
 namespace Drupal\Tests\rules\Integration\Action;
 
-use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Tests\rules\Integration\RulesEntityIntegrationTestBase;
 
 /**
@@ -36,53 +35,6 @@ class EntityPathAliasCreateTest extends RulesEntityIntegrationTestBase {
   public function setUp() {
     parent::setUp();
 
-    // Prepare a content entity type instance.
-    $this->entityType = new ContentEntityType([
-      'id' => 'test',
-      'label' => 'Test',
-      'entity_keys' => [
-        'bundle' => 'bundle',
-      ],
-    ]);
-
-    // Prepare mocked entity manager.
-    $this->entityManager = $this->getMockBuilder('Drupal\Core\Entity\EntityManager')
-      ->setMethods(['getBundleInfo', 'getDefinitions', 'getBaseFieldDefinitions'])
-      ->setConstructorArgs([
-        $this->namespaces,
-        $this->moduleHandler,
-        $this->cacheBackend,
-        $this->languageManager,
-        $this->getStringTranslationStub(),
-        $this->getClassResolverStub(),
-        $this->typedDataManager,
-        $this->getMock('Drupal\Core\KeyValueStore\KeyValueStoreInterface'),
-        $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')
-      ])
-      ->getMock();
-
-    // Return a mocked list of base fields definitions.
-    $this->entityManager
-      ->expects($this->any())
-      ->method('getBaseFieldDefinitions')
-      ->will($this->returnValue([]));
-
-    // Return a mocked list of entity types.
-    $this->entityManager
-      ->expects($this->any())
-      ->method('getDefinitions')
-      ->will($this->returnValue(['test' => $this->entityType]));
-
-    // Return some dummy bundle information for now, so that the entity manager
-    // does not call out to the config entity system to get bundle information.
-    $this->entityManager
-      ->expects($this->any())
-      ->method('getBundleInfo')
-      ->with($this->anything())
-      ->will($this->returnValue(['test' => ['label' => 'Test']]));
-
-    $this->container->set('entity.manager', $this->entityManager);
-
     // Prepare mocked AliasStorageInterface.
     $this->aliasStorage = $this->getMockBuilder('Drupal\Core\Path\AliasStorageInterface')
       ->setMethods(['save'])
@@ -91,7 +43,7 @@ class EntityPathAliasCreateTest extends RulesEntityIntegrationTestBase {
     $this->container->set('path.alias_storage', $this->aliasStorage);
 
     // Instantiate the action we are testing.
-    $this->action = $this->actionManager->createInstance('rules_entity_path_alias_create:entity:test');
+    $this->action = $this->actionManager->createInstance('rules_entity_path_alias_create:entity:entity_test');
   }
 
   /**
@@ -100,7 +52,7 @@ class EntityPathAliasCreateTest extends RulesEntityIntegrationTestBase {
    * @covers ::summary
    */
   public function testSummary() {
-    $this->assertEquals('Create test path alias', $this->action->summary());
+    $this->assertEquals('Create entity_test path alias', $this->action->summary());
   }
 
   /**

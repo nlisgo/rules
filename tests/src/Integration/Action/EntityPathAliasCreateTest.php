@@ -56,7 +56,7 @@ class EntityPathAliasCreateTest extends RulesEntityIntegrationTestBase {
   }
 
   /**
-   * Tests the action execution with an unsaved node.
+   * Tests the action execution with an unsaved entity.
    *
    * @covers ::execute
    */

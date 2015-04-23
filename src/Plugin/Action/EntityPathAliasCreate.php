@@ -39,7 +39,7 @@ class EntityPathAliasCreate extends RulesActionBase implements ContainerFactoryP
   protected $entityTypeId;
 
   /**
-   * Constructs an EntityCreate object.
+   * Constructs an EntityPathAliasCreate object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
